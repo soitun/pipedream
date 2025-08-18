@@ -331,6 +331,8 @@ export default {
         headers: this._getHeaders(headers),
         ...args,
       };
+      console.log("config", config);
+
       return axios($, config);
     },
     async createHook({

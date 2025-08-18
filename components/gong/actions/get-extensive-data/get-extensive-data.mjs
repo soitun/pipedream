@@ -1,6 +1,7 @@
-import app from "../../gong.app.mjs";
-import constants from "../../common/constants.mjs";
 import { ConfigurationError } from "@pipedream/platform";
+import constants from "../../common/constants.mjs";
+import { parseObject } from "../../common/utils.mjs";
+import app from "../../gong.app.mjs";
 
 export default {
   key: "gong-get-extensive-data",
@@ -40,7 +41,7 @@ export default {
     primaryUserIds: {
       type: "string[]",
       label: "Primary User IDs",
-      description: "An optional list of user identifiers, if supplied the API will return only the calls hosted by the specified users. The identifiers in this field match the primaryUserId field of the calls.",
+      description: "An list of user identifiers, if supplied the API will return only the calls hosted by the specified users. The identifiers in this field match the primaryUserId field of the calls.",
       propDefinition: [
         app,
         "userId",
@@ -57,7 +58,7 @@ export default {
     context: {
       type: "string",
       label: "Context",
-      description: "Allowed: None, Basic, Extended. If 'Basic', add links to external systems (context objects) such as CRM, Telephony System, Case Management. If 'Extended' include also data (context fields) for these links. Default value 'None'",
+      description: "If 'Basic', add links to external systems (context objects) such as CRM, Telephony System, Case Management. If 'Extended' include also data (context fields) for these links.",
       options: [
         "None",
         "Basic",
@@ -70,7 +71,6 @@ export default {
       type: "string[]",
       label: "Context Timing",
       description: "Allowed: Now, TimeOfCall. Timing for the context data. The field is optional and can contain either 'Now' or 'TimeOfCall' or both. The default value is ['Now']. Can be provided only when the context field is set to 'Extended'",
-      default: [],
       optional: true,
     },
     includeParties: {
@@ -152,6 +152,9 @@ export default {
       throw new ConfigurationError("Must not provide both `callIds` and `workspaceId`");
     }
 
+    const parsedExposedFieldsContent = parseObject(exposedFieldsContent);
+    const parsedExposedFieldsInteraction = parseObject(exposedFieldsInteraction);
+
     const contentSelector = {
       "context": context || "None",
       ...(contextTiming.length > 0 && {
@@ -160,22 +163,22 @@ export default {
       "exposedFields": {
         "parties": includeParties || false,
         "content": {
-          "structure": exposedFieldsContent.structure || false,
-          "topics": exposedFieldsContent.topics || false,
-          "trackers": exposedFieldsContent.trackers || false,
-          "trackerOccurrences": exposedFieldsContent.trackerOccurrences || false,
-          "pointsOfInterest": exposedFieldsContent.pointsOfInterest || false,
-          "brief": exposedFieldsContent.brief || false,
-          "outline": exposedFieldsContent.outline || false,
-          "highlights": exposedFieldsContent.highlights || false,
-          "callOutcome": exposedFieldsContent.callOutcome || false,
-          "keyPoints": exposedFieldsContent.keyPoints || false,
+          "structure": parsedExposedFieldsContent.structure || false,
+          "topics": parsedExposedFieldsContent.topics || false,
+          "trackers": parsedExposedFieldsContent.trackers || false,
+          "trackerOccurrences": parsedExposedFieldsContent.trackerOccurrences || false,
+          "pointsOfInterest": parsedExposedFieldsContent.pointsOfInterest || false,
+          "brief": parsedExposedFieldsContent.brief || false,
+          "outline": parsedExposedFieldsContent.outline || false,
+          "highlights": parsedExposedFieldsContent.highlights || false,
+          "callOutcome": parsedExposedFieldsContent.callOutcome || false,
+          "keyPoints": parsedExposedFieldsContent.keyPoints || false,
         },
         "interaction": {
-          "speakers": exposedFieldsInteraction.speakers || false,
-          "video": exposedFieldsInteraction.video || false,
-          "personInteractionStats": exposedFieldsInteraction.personInteractionStats || false,
-          "questions": exposedFieldsInteraction.questions || false,
+          "speakers": parsedExposedFieldsInteraction.speakers || false,
+          "video": parsedExposedFieldsInteraction.video || false,
+          "personInteractionStats": parsedExposedFieldsInteraction.personInteractionStats || false,
+          "questions": parsedExposedFieldsInteraction.questions || false,
         },
         "collaboration": {
           "publicComments": includePublicComments || false,

@@ -42,6 +42,31 @@ function parseArray(value) {
   }
 }
 
+function parseObject(obj) {
+  if (!obj) return undefined;
+
+  if (Array.isArray(obj)) {
+    return obj.map((item) => {
+      if (typeof item === "string") {
+        try {
+          return JSON.parse(item);
+        } catch (e) {
+          return item;
+        }
+      }
+      return item;
+    });
+  }
+  if (typeof obj === "string") {
+    try {
+      return JSON.parse(obj);
+    } catch (e) {
+      return obj;
+    }
+  }
+  return obj;
+};
+
 async function streamIterator(stream) {
   const resources = [];
   for await (const resource of stream) {
@@ -54,4 +79,5 @@ export default {
   parseArray,
   parse,
   streamIterator,
+  parseObject,
 };
