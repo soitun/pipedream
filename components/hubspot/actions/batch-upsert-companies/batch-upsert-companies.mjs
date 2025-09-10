@@ -6,8 +6,9 @@ import hubspot from "../../hubspot.app.mjs";
 export default {
   key: "hubspot-batch-upsert-companies",
   name: "Batch Upsert Companies",
-  description: "Upsert a batch of companies in Hubspot. [See the documentation](https://developers.hubspot.com/docs/reference/api/crm/objects/companies#post-%2Fcrm%2Fv3%2Fobjects%2Fcompanies%2Fbatch%2Fupsert)",
-  version: "0.0.5",
+  description:
+    "Upsert a batch of companies in Hubspot. [See the documentation](https://developers.hubspot.com/docs/reference/api/crm/objects/companies#post-%2Fcrm%2Fv3%2Fobjects%2Fcompanies%2Fbatch%2Fupsert)",
+  version: "0.0.6",
   type: "action",
   props: {
     hubspot,

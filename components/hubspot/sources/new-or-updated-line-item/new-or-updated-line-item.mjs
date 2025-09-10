@@ -9,8 +9,9 @@ export default {
   ...common,
   key: "hubspot-new-or-updated-line-item",
   name: "New or Updated Line Item",
-  description: "Emit new event for each new line item added or updated in Hubspot.",
-  version: "0.0.17",
+  description:
+    "Emit new event for each new line item added or updated in Hubspot.",
+  version: "0.0.16",
   dedupe: "unique",
   type: "source",
   props: {
