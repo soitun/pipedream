@@ -208,6 +208,63 @@ export default {
         }));
       },
     },
+    categoryId: {
+      type: "integer",
+      label: "Category ID",
+      description: "Select a category or provide an ID",
+      async options({
+        helpCenterId, page = 0,
+      }) {
+        const response = await this.listCategories({
+          helpCenterId,
+          params: {
+            page: page + 1,
+          },
+        });
+        return response.data.map((category) => ({
+          label: category.name,
+          value: category.id,
+        }));
+      },
+    },
+    articleId: {
+      type: "integer",
+      label: "Article ID",
+      description: "Select an article or provide an ID",
+      async options({
+        helpCenterId, page = 0,
+      }) {
+        const response = await this.getArticles({
+          helpCenterId,
+          params: {
+            page: page + 1,
+          },
+        });
+        return response.data.map((article) => ({
+          label: article.title,
+          value: article.id,
+        }));
+      },
+    },
+    blockId: {
+      type: "integer",
+      label: "Block ID",
+      description: "Select a block or provide an ID",
+      async options({
+        helpCenterId, page = 0,
+      }) {
+        const response = await this.listBlocks({
+          helpCenterId,
+          params: {
+            page: page + 1,
+          },
+        });
+        return response.data.map((block) => ({
+          label: block.name,
+          value: block.id,
+        }));
+      },
+    },
   },
   methods: {
     _getUrl(path) {
@@ -368,6 +425,60 @@ export default {
       return this._makeRequest({
         method: "POST",
         path: `/tickets/${ticketId}/labels`,
+        ...args,
+      });
+    },
+    listQuickReplies(args = {}) {
+      return this._makeRequest({
+        path: "/quick_replies",
+        ...args,
+      });
+    },
+    getHelpCenter({
+      helpCenterId, ...args
+    } = {}) {
+      return this._makeRequest({
+        path: `/help_center/${helpCenterId}`,
+        ...args,
+      });
+    },
+    listCategories({
+      helpCenterId, ...args
+    } = {}) {
+      return this._makeRequest({
+        path: `/help_center/${helpCenterId}/categories`,
+        ...args,
+      });
+    },
+    getCategory({
+      helpCenterId, categoryId, ...args
+    } = {}) {
+      return this._makeRequest({
+        path: `/help_center/${helpCenterId}/categories/${categoryId}`,
+        ...args,
+      });
+    },
+    getArticle({
+      helpCenterId, articleId, ...args
+    } = {}) {
+      return this._makeRequest({
+        path: `/help_center/${helpCenterId}/articles/${articleId}`,
+        ...args,
+      });
+    },
+    listBlocks({
+      helpCenterId, ...args
+    } = {}) {
+      return this._makeRequest({
+        path: `/help_center/${helpCenterId}/blocks`,
+        ...args,
+      });
+    },
+    getBlock({
+      helpCenterId, blockId, ...args
+    } = {}) {
+      return this._makeRequest({
+        path: `/help_center/${helpCenterId}/blocks/${blockId}`,
         ...args,
       });
     },
